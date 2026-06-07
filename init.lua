@@ -383,18 +383,25 @@ do
   -- change the command under that to load whatever the name of that colorscheme is.
   --
   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  vim.pack.add { gh 'folke/tokyonight.nvim' }
-  ---@diagnostic disable-next-line: missing-fields
-  require('tokyonight').setup {
+  vim.pack.add { { src = gh 'catppuccin/nvim', name = 'catppuccin' } }
+  require('catppuccin').setup {
+    flavour = 'mocha', -- latte, frappe, macchiato, mocha
     styles = {
-      comments = { italic = false }, -- Disable italics in comments
+      comments = {}, -- no italics in comments
+    },
+    integrations = {
+      gitsigns = true,
+      treesitter = true,
+      mason = true,
+      neotree = true,
+      which_key = true,
+      native_lsp = { enabled = true },
     },
   }
 
   -- Load the colorscheme here.
-  -- Like many other themes, this one has different styles, and you could load
-  -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+  -- Flavours: catppuccin-latte, catppuccin-frappe, catppuccin-macchiato, catppuccin-mocha.
+  vim.cmd.colorscheme 'catppuccin-mocha'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -426,21 +433,24 @@ do
   -- - sr)'  - [S]urround [R]eplace [)] [']
   require('mini.surround').setup()
 
-  -- Simple and easy statusline.
-  --  You could remove this setup call if you don't like it,
-  --  and try some other statusline plugin
-  local statusline = require 'mini.statusline'
-  -- Set `use_icons` to true if you have a Nerd Font
-  statusline.setup { use_icons = vim.g.have_nerd_font }
-
-  -- You can configure sections in the statusline by overriding their
-  -- default behavior. For example, here we set the section for
-  -- cursor location to LINE:COLUMN
-  ---@diagnostic disable-next-line: duplicate-set-field
-  statusline.section_location = function() return '%2l:%-2v' end
-
-  -- ... and there is more!
-  --  Check out: https://github.com/nvim-mini/mini.nvim
+  -- Statusline: lualine, themed with catppuccin.
+  vim.pack.add { gh 'nvim-lualine/lualine.nvim' }
+  require('lualine').setup {
+    options = {
+      theme = 'catppuccin-mocha',
+      icons_enabled = vim.g.have_nerd_font,
+      section_separators = '',
+      component_separators = '',
+    },
+    sections = {
+      lualine_a = { 'mode' },
+      lualine_b = { 'branch', 'diff', 'diagnostics' },
+      lualine_c = { 'filename' },
+      lualine_x = { 'filetype' },
+      lualine_y = { 'progress' },
+      lualine_z = { 'location' },
+    },
+  }
 end
 
 -- ============================================================
